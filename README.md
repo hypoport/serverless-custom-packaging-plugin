@@ -1,0 +1,1 @@
+# serverless-custom-packaging-plugin
