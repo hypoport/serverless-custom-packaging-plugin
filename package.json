@@ -1,0 +1,31 @@
+{
+  "name": "serverless-custom-python-packaging-plugin",
+  "version": "1.0.1",
+  "description": "Plugin for the Serverless Framework - Packages your sourcecode using a custom target path inside the zip. Related to https://github.com/serverless/serverless/issues/3366",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/...."
+  },
+  "scripts": {
+    "test": "find . -name '*.test.js' | xargs mocha -R spec --require ./lib/index.js"
+  },
+  "engines": {
+    "node": ">=8.0"
+  },
+  "files": [
+    "lib",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "archiver": "^1.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2",
+    "should": "^11.2.1"
+  },
+  "author": "benjamin.weigel@europace.de",
+  "license": "MIT"
+}
