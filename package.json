@@ -1,6 +1,6 @@
 {
   "name": "serverless-custom-python-packaging-plugin",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "description": "Plugin for the Serverless Framework - Packages your sourcecode using a custom target path inside the zip. Related to https://github.com/serverless/serverless/issues/3366",
   "main": "index.js",
   "repository": {
@@ -19,12 +19,14 @@
     "README.md"
   ],
   "dependencies": {
-    "archiver": "^1.1.0"
+    "archiver": "^1.1.0",
+    "bluebird": "^3.5.0"
   },
   "devDependencies": {
     "chai": "^4.1.0",
     "mocha": "^3.4.2",
-    "should": "^11.2.1"
+    "should": "^11.2.1",
+    "serverless": "1.17.0"
   },
   "author": "benjamin.weigel@europace.de",
   "license": "MIT"
