@@ -1,0 +1,95 @@
+Index: lib/plugins/aws/deployFunction/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/plugins/aws/deployFunction/index.js	(date 1499257898000)
++++ lib/plugins/aws/deployFunction/index.js	(revision )
+@@ -12,8 +12,8 @@
+     this.serverless = serverless;
+     this.options = options || {};
+     this.packagePath = this.options.package ||
+-      this.serverless.service.package.path ||
+-      path.join(this.serverless.config.servicePath || '.', '.serverless');
++                       this.serverless.service.package.path ||
++                       path.join(this.serverless.config.servicePath || '.', '.serverless');
+     this.provider = this.serverless.getProvider('aws');
+ 
+     // used to store data received via AWS SDK
+@@ -50,25 +50,34 @@
+       params,
+       this.options.stage, this.options.region
+     )
+-    .then((result) => {
+-      this.serverless.service.provider.remoteFunctionData = result;
+-      return result;
+-    })
+-    .catch(() => {
+-      const errorMessage = [
+-        `The function "${this.options.function}" you want to update is not yet deployed.`,
+-        ' Please run "serverless deploy" to deploy your service.',
+-        ' After that you can redeploy your services functions with the',
+-        ' "serverless deploy function" command.',
+-      ].join('');
+-      throw new this.serverless.classes.Error(errorMessage);
+-    });
++      .then((result) => {
++        this.serverless.service.provider.remoteFunctionData = result;
++        return result;
++      })
++      .catch(() => {
++        const errorMessage = [
++          `The function "${this.options.function}" you want to update is not yet deployed.`,
++          ' Please run "serverless deploy" to deploy your service.',
++          ' After that you can redeploy your services functions with the',
++          ' "serverless deploy function" command.',
++        ].join('');
++        throw new this.serverless.classes.Error(errorMessage);
++      });
+   }
+ 
++  getFunctionArtifactPath() {
++    const functionObject = this.serverless.service.getFunction(this.options.function);
++    if (functionObject.package.artifact) {
++      return functionObject.package.artifact;
++    }
++    return false;
++  }
++
+   deployFunction() {
+     const artifactFileName = this.provider.naming
+       .getFunctionArtifactName(this.options.function);
+-    const artifactFilePath = path.join(this.packagePath, artifactFileName);
++    const artifactFilePath = this.getFunctionArtifactPath() ||
++                             path.join(this.packagePath, artifactFileName);
+     const data = fs.readFileSync(artifactFilePath);
+ 
+     const remoteHash = this.serverless.service.provider.remoteFunctionData.Configuration.CodeSha256;
+Index: lib/plugins/package/lib/packageService.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/plugins/package/lib/packageService.js	(date 1499257898000)
++++ lib/plugins/package/lib/packageService.js	(revision )
+@@ -38,6 +38,9 @@
+         this.serverless.cli.log(`Packaging disabled for function: "${functionName}"`);
+         return BbPromise.resolve();
+       }
++      if (functionObject.package.artifact) {
++        return BbPromise.resolve();
++      }
+       if (functionObject.package.individually || this.serverless.service
+           .package.individually) {
+         return this.packageFunction(functionName);
+@@ -74,6 +77,10 @@
+     const functionObject = this.serverless.service.getFunction(functionName);
+     const funcPackageConfig = functionObject.package || {};
+ 
++    if (functionObject.package.artifact) {
++      return BbPromise.resolve();
++    }
++
+     const exclude = this.getExcludes(funcPackageConfig.exclude);
+     const include = this.getIncludes(funcPackageConfig.include);
+     const zipFileName = `${functionName}.zip`;

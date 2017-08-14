@@ -1,0 +1,78 @@
+Index: lib/plugins/aws/deploy/lib/extendedValidate.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/plugins/aws/deploy/lib/extendedValidate.js	(date 1501007962000)
++++ lib/plugins/aws/deploy/lib/extendedValidate.js	(date 1501011027000)
+@@ -34,7 +34,7 @@
+       // artifact file validation (multiple function artifacts)
+       this.serverless.service.getAllFunctions().forEach(functionName => {
+         const artifactFileName = this.provider.naming.getFunctionArtifactName(functionName);
+-        const artifactFilePath = path.join(this.packagePath, artifactFileName);
++        const artifactFilePath = this.provider.naming.getFunctionArtifactPath(this.serverless.service.getFunction(functionName)) || path.join(this.packagePath, artifactFileName);
+         if (!this.serverless.utils.fileExistsSync(artifactFilePath)) {
+           throw new this.serverless.classes
+             .Error(`No ${artifactFileName} file found in the package path you provided.`);
+Index: lib/plugins/aws/lib/naming.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/plugins/aws/lib/naming.js	(date 1501007962000)
++++ lib/plugins/aws/lib/naming.js	(date 1501011027000)
+@@ -57,6 +57,13 @@
+     return `${functionName}.zip`;
+   },
+ 
++  getFunctionArtifactPath(functionObject) {
++    if (functionObject.package.artifact) {
++      return functionObject.package.artifact
++    }
++    return false
++  },
++
+   getServiceStateFileName() {
+     return 'serverless-state.json';
+   },
+@@ -116,8 +123,8 @@
+   // Lambda
+   getNormalizedFunctionName(functionName) {
+     return this.normalizeName(functionName
+-      .replace(/-/g, 'Dash')
+-      .replace(/_/g, 'Underscore'));
++                                .replace(/-/g, 'Dash')
++                                .replace(/_/g, 'Underscore'));
+   },
+   extractLambdaNameFromArn(functionArn) {
+     return functionArn.substring(functionArn.lastIndexOf(':') + 1);
+@@ -223,9 +230,9 @@
+   getStreamLogicalId(functionName, streamType, streamName) {
+     return `${
+       this.getNormalizedFunctionName(functionName)
+-    }EventSourceMapping${
++      }EventSourceMapping${
+       this.normalizeName(streamType)
+-    }${this.normalizeNameToAlphaNumericOnly(streamName)}`;
++      }${this.normalizeNameToAlphaNumericOnly(streamName)}`;
+   },
+ 
+   // IoT
+@@ -277,7 +284,7 @@
+   getLambdaCloudWatchEventPermissionLogicalId(functionName, cloudWatchIndex) {
+     return `${this
+       .getNormalizedFunctionName(functionName)}LambdaPermissionEventsRuleCloudWatchEvent${
+-        cloudWatchIndex}`;
++      cloudWatchIndex}`;
+   },
+   getLambdaApiGatewayPermissionLogicalId(functionName) {
+     return `${this.getNormalizedFunctionName(functionName)}LambdaPermissionApiGateway`;
+@@ -287,7 +294,7 @@
+   },
+   getLambdaCloudWatchLogPermissionLogicalId(functionName, logsIndex) {
+     return `${this.getNormalizedFunctionName(functionName)
+-    }LambdaPermissionLogsSubscriptionFilterCloudWatchLog${logsIndex}`;
++      }LambdaPermissionLogsSubscriptionFilterCloudWatchLog${logsIndex}`;
+   },
+   getLambdaCognitoUserPoolPermissionLogicalId(functionName, poolId, triggerSource) {
+     return `${this
