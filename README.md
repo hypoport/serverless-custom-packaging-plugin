@@ -11,7 +11,7 @@ This plugin was originally built to allow deployment of arbitrarily nested pytho
 
 ### The Problem
  
- Vanilla serverless packages your source-code, but retains the folder structure inside the zip-file. However, AWS Lambda can only find the entry-point to your function if it is packaged in a zip-files at root level (see [the AWW-Lambda docs](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html)). 
+ Vanilla serverless packages your source-code, but retains the folder structure inside the zip-file. However, AWS Lambda can only find the entry-point to your function if it is packaged in a zip-files at root level (see [the AWS-Lambda docs](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html)). 
  
 ### How it was solved
 
@@ -28,7 +28,7 @@ You define a `path` that you want to package inside of serverless's `package` pr
 ```yaml
 ...
 functions:
-  myFunctin:
+  myFunction:
     ...
     package:
       path: path/to/my/code

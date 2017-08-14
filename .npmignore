@@ -1,0 +1,6 @@
+/patches/
+*.log
+*.iml
+*.patch
+/.idea/
+
