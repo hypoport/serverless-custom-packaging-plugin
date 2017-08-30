@@ -23,9 +23,18 @@ You define a `path` that you want to package inside of serverless's `package` pr
 2. If you want to **include only certain file-names or extensions** you may define them using the `include_globs` property. 
 3. If you have **additional libraries** you need inside the lambda environment you may define a path in the `libs` property. The contents of this folder will be packaged alongside your functions code (in the root of the zip-file). This lets you include arbitrary python modules (i.e. built against the Lambda AMI inside of docker), but keep them away from your code during development.
 
+## Installation
+
+```
+npm install serverless-custom-packaging-plugin --save-dev
+```
+This installs the plugin into your `node_modules` and adds the dev-dependency to your `package.json`.
+
 ## How to use it
 
 ```yaml
+plugins:
+  - serverless-custom-packaging-plugin
 ...
 functions:
   myFunction:
