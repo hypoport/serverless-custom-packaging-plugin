@@ -1,6 +1,6 @@
 {
   "name": "serverless-custom-packaging-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Plugin for the Serverless Framework - Packages your sourcecode using a custom target path inside the zip. Related to https://github.com/serverless/serverless/issues/3366",
   "main": "lib/index.js",
   "repository": {
