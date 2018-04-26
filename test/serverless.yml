@@ -1,0 +1,22 @@
+service: aws-python3 # NOTE: update this with your service name
+
+plugins:
+  - serverless-custom-packaging-plugin
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: python3.6
+
+
+
+functions:
+  hello:
+    handler: handler.hello
+    package:
+      path: ./src
+      artifact: src.zip
+      libs: ./libs
+
