@@ -36,6 +36,9 @@ This installs the plugin into your `node_modules` and adds the dev-dependency to
 plugins:
   - serverless-custom-packaging-plugin
 ...
+package:
+  artifact: path/to/my/artifact.zip
+...
 functions:
   myFunction:
     ...
